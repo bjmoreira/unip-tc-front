@@ -1,4 +1,4 @@
-# Questões Adaptativas: interface
+# SISTEMA DE RECOMENDAÇÃO ADAPTATIVA DE QUESTÕES PARA REFORÇO DA APRENDIZAGEM COM BASE NO DESEMPENHO DO ESTUDANTE: interface
 
 Interface do sistema de recomendação adaptativa de questões. Consome a API do
 repositório `questoes-adaptativas-api`.
