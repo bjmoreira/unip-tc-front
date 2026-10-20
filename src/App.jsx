@@ -503,8 +503,13 @@ function Prova({
   carregando,
   salvando,
 }) {
+  const [confirmando, setConfirmando] = useState(false)
+
   const q = questoes[indice]
   if (!q) return null
+
+  const pendentes = questoes.filter((item) => !respostas[item.questao_id]).length
+  const primeiraPendente = questoes.findIndex((item) => !respostas[item.questao_id])
 
   return (
     <section className="cartao">
@@ -521,25 +526,38 @@ function Prova({
             </span>
           )}
         </span>
-        <button className="finalizar" onClick={aoEntregar} disabled={carregando}>
+        <button
+          className="finalizar"
+          onClick={() => setConfirmando(true)}
+          disabled={carregando}
+        >
           {carregando ? 'Corrigindo...' : 'Finalizar e corrigir'}
         </button>
       </div>
 
       <div className="grade-navegacao">
-        {questoes.map((item, i) => (
-          <button
-            key={item.questao_id}
-            className={[
-              'passo',
-              i === indice ? 'atual' : '',
-              respostas[item.questao_id] ? 'feita' : '',
-            ].join(' ')}
-            onClick={() => aoNavegar(i)}
-          >
-            {i + 1}
-          </button>
-        ))}
+        {questoes.map((item, i) => {
+          const feita = Boolean(respostas[item.questao_id])
+          const atual = i === indice
+
+          // O número sozinho não diz nada a quem ouve a tela: o rótulo carrega
+          // o estado que a cor e a marca mostram a quem vê.
+          const rotulo =
+            `Questão ${i + 1}, ${feita ? 'respondida' : 'sem resposta'}` +
+            (atual ? ', questão atual' : '')
+
+          return (
+            <button
+              key={item.questao_id}
+              className={['passo', atual ? 'atual' : '', feita ? 'feita' : ''].join(' ')}
+              onClick={() => aoNavegar(i)}
+              aria-current={atual ? 'step' : undefined}
+              aria-label={rotulo}
+            >
+              {i + 1}
+            </button>
+          )
+        })}
       </div>
 
       <div className="questao">
@@ -575,6 +593,19 @@ function Prova({
         >
           Anterior
         </button>
+
+        {/* Quem pulou questões teria de caçar o número na grade. O atalho só
+            aparece quando há pendente em outro lugar da prova. */}
+        {primeiraPendente !== -1 && primeiraPendente !== indice && (
+          <button
+            className="secundario"
+            onClick={() => aoNavegar(primeiraPendente)}
+            aria-label={`Ir para a questão ${primeiraPendente + 1}, a primeira sem resposta`}
+          >
+            Primeira sem resposta
+          </button>
+        )}
+
         <button
           className="principal avancar"
           onClick={() => aoNavegar(indice + 1)}
@@ -588,7 +619,71 @@ function Prova({
         A correção acontece apenas ao final da prova. Questões sem resposta são
         contadas como erro.
       </p>
+
+      {confirmando && (
+        <ConfirmarEntrega
+          pendentes={pendentes}
+          total={questoes.length}
+          aoConfirmar={() => {
+            setConfirmando(false)
+            aoEntregar()
+          }}
+          aoCancelar={() => setConfirmando(false)}
+        />
+      )}
     </section>
+  )
+}
+
+/**
+ * Confirmação da entrega.
+ *
+ * A entrega corrige a prova e não tem volta, e as questões em branco valem
+ * erro. A contagem das pendentes aparece aqui, junto do botão que confirma,
+ * porque no rodapé da prova o aviso fica longe de quem já decidiu entregar.
+ */
+function ConfirmarEntrega({ pendentes, total, aoConfirmar, aoCancelar }) {
+  useEffect(() => {
+    const aoTeclar = (e) => {
+      if (e.key === 'Escape') {
+        aoCancelar()
+      }
+    }
+
+    window.addEventListener('keydown', aoTeclar)
+    return () => window.removeEventListener('keydown', aoTeclar)
+  }, [aoCancelar])
+
+  return (
+    <div className="dialogo" role="presentation">
+      <div
+        className="dialogo-caixa"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-entrega"
+      >
+        <h2 id="titulo-entrega">Entregar a prova?</h2>
+        <p className="ajuda">
+          {pendentes === 0
+            ? `Todas as ${total} questões estão respondidas.`
+            : pendentes === 1
+              ? 'Uma questão continua sem resposta e será contada como erro.'
+              : `${pendentes} questões continuam sem resposta e serão contadas como erro.`}{' '}
+          A correção acontece agora e não há como voltar a esta prova.
+        </p>
+
+        <div className="dialogo-acoes">
+          {/* O foco começa na saída segura: quem confirma por reflexo volta
+              para a prova, em vez de entregá-la. */}
+          <button className="secundario" onClick={aoCancelar} autoFocus>
+            Voltar à prova
+          </button>
+          <button className="principal" onClick={aoConfirmar}>
+            Entregar e corrigir
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
 

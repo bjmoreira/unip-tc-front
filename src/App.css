@@ -180,6 +180,7 @@ button:disabled {
 }
 
 .passo {
+  position: relative;
   width: 34px;
   height: 34px;
   background: var(--superficie);
@@ -188,10 +189,30 @@ button:disabled {
   font-size: 13px;
 }
 
+/*
+ * Respondida e pendente não podem se separar só pela cor: é essa a informação
+ * que decide se a prova pode ser entregue. A pendente fica com a borda
+ * tracejada e a respondida ganha a marca no canto, visíveis a quem não
+ * distingue o azul do cinza.
+ */
+.passo:not(.feita) {
+  border-style: dashed;
+}
+
 .passo.feita {
   background: var(--destaque-claro);
   border-color: #b9c8f5;
   color: var(--destaque);
+}
+
+.passo.feita::after {
+  content: '✓';
+  position: absolute;
+  top: 0;
+  right: 3px;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 700;
 }
 
 .passo.atual {
@@ -262,6 +283,44 @@ button:disabled {
 .rodape-prova .avancar {
   margin-top: 0;
   margin-left: auto;
+}
+
+/* confirmação */
+
+.dialogo {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 35, 40, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 25;
+}
+
+.dialogo-caixa {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  padding: 22px;
+  max-width: 440px;
+  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.18);
+}
+
+.dialogo-caixa h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.dialogo-acoes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.dialogo-acoes .principal {
+  margin-top: 0;
 }
 
 /* tabelas */
