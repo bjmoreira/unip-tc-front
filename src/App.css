@@ -1,0 +1,623 @@
+:root {
+  --fundo: #f4f5f7;
+  --superficie: #ffffff;
+  --borda: #dcdfe4;
+  --texto: #1f2328;
+  --suave: #61697a;
+  --destaque: #2f5bd7;
+  --destaque-claro: #e8eeff;
+  --ruim: #b3261e;
+  --bom: #17734a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.app {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cabecalho h1 {
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+}
+
+.cabecalho p {
+  margin: 4px 0 0;
+  color: var(--suave);
+  font-size: 14px;
+}
+
+.cartao {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.cartao h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.cartao h3 {
+  margin: 22px 0 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--suave);
+}
+
+.ajuda {
+  color: var(--suave);
+  font-size: 14px;
+  margin: 8px 0 0;
+}
+
+.erro {
+  background: #fdecea;
+  border: 1px solid #f4c7c3;
+  color: var(--ruim);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.principal {
+  margin-top: 20px;
+  background: var(--destaque);
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: 600;
+}
+
+.secundario {
+  background: var(--superficie);
+  border-color: var(--borda);
+  color: var(--texto);
+  padding: 10px 18px;
+}
+
+.link {
+  background: none;
+  color: var(--destaque);
+  padding: 6px 0;
+  text-decoration: underline;
+}
+
+.tamanhos {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.tamanho {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  padding: 12px 22px;
+  font-weight: 600;
+  min-width: 68px;
+}
+
+.tamanho.ativo {
+  background: var(--destaque-claro);
+  border-color: var(--destaque);
+  color: var(--destaque);
+}
+
+/* prova */
+
+.topo-prova {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/*
+ * A entrega da prova fica no topo, e não junto da navegação. No rodapé ela
+ * ocupava a posição para onde a mão vai ao avançar de questão, o que levava a
+ * entregas acidentais. Esse lugar agora é do botão "Próxima".
+ */
+.finalizar {
+  margin-left: auto;
+  background: var(--superficie);
+  border-color: var(--destaque);
+  color: var(--destaque);
+  padding: 8px 16px;
+  font-weight: 600;
+}
+
+.etiqueta {
+  font-weight: 600;
+}
+
+.contador {
+  color: var(--suave);
+  font-size: 14px;
+}
+
+.grade-navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 16px 0 20px;
+}
+
+.passo {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  color: var(--suave);
+  font-size: 13px;
+}
+
+/*
+ * Respondida e pendente não podem se separar só pela cor: é essa a informação
+ * que decide se a prova pode ser entregue. A pendente fica com a borda
+ * tracejada e a respondida ganha a marca no canto, visíveis a quem não
+ * distingue o azul do cinza.
+ */
+.passo:not(.feita) {
+  border-style: dashed;
+}
+
+.passo.feita {
+  background: var(--destaque-claro);
+  border-color: #b9c8f5;
+  color: var(--destaque);
+}
+
+.passo.feita::after {
+  content: '✓';
+  position: absolute;
+  top: 0;
+  right: 3px;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.passo.atual {
+  border-color: var(--destaque);
+  border-width: 2px;
+  color: var(--texto);
+  font-weight: 700;
+}
+
+.questao {
+  border-top: 1px solid var(--borda);
+  padding-top: 18px;
+}
+
+.origem {
+  margin: 0;
+  color: var(--suave);
+  font-size: 13px;
+}
+
+.enunciado {
+  margin: 8px 0 16px;
+  font-size: 16px;
+  white-space: pre-wrap;
+}
+
+.alternativas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.alternativas label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.alternativas label.marcada {
+  border-color: var(--destaque);
+  background: var(--destaque-claro);
+}
+
+.alternativas input {
+  margin-top: 4px;
+}
+
+.letra {
+  font-weight: 700;
+  color: var(--suave);
+  min-width: 16px;
+}
+
+.rodape-prova {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.rodape-prova .avancar {
+  margin-top: 0;
+  margin-left: auto;
+}
+
+/* confirmação */
+
+.dialogo {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 35, 40, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 25;
+}
+
+.dialogo-caixa {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  padding: 22px;
+  max-width: 440px;
+  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.18);
+}
+
+.dialogo-caixa h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.dialogo-acoes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.dialogo-acoes .principal {
+  margin-top: 0;
+}
+
+/* tabelas */
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.tabela th,
+.tabela td {
+  border-bottom: 1px solid var(--borda);
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.tabela th {
+  color: var(--suave);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tabela .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.ruim {
+  color: var(--ruim);
+  font-weight: 600;
+}
+
+.bom {
+  color: var(--bom);
+  font-weight: 600;
+}
+
+/* barras */
+
+.barras {
+  display: grid;
+  gap: 6px;
+}
+
+.barra {
+  display: grid;
+  grid-template-columns: 190px 1fr 78px;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.rotulo {
+  color: var(--suave);
+}
+
+.trilho {
+  background: var(--fundo);
+  border-radius: 4px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.preenchimento {
+  display: block;
+  height: 100%;
+  background: var(--destaque);
+  border-radius: 4px;
+}
+
+.valor {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--suave);
+}
+
+@media (max-width: 640px) {
+  .barra {
+    grid-template-columns: 130px 1fr 62px;
+  }
+
+  .finalizar {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* acesso */
+
+.cartao.estreito {
+  max-width: 460px;
+}
+
+.abas {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.aba {
+  background: none;
+  border: 1px solid var(--borda);
+  color: var(--suave);
+  padding: 8px 16px;
+  font-weight: 600;
+}
+
+.aba.ativa {
+  background: var(--destaque-claro);
+  border-color: var(--destaque);
+  color: var(--destaque);
+}
+
+.formulario {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.formulario label,
+.campo {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--suave);
+}
+
+.formulario input {
+  font: inherit;
+  font-weight: 400;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 9px 11px;
+}
+
+.formulario input:focus {
+  outline: 2px solid var(--destaque);
+  outline-offset: -1px;
+  border-color: var(--destaque);
+}
+
+.campo {
+  margin-top: 16px;
+}
+
+.campo .tamanhos {
+  margin-top: 0;
+}
+
+.identidade {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quem {
+  font-size: 14px;
+  color: var(--suave);
+}
+
+.atalho {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--borda);
+}
+
+.atalho .secundario {
+  width: 100%;
+}
+
+/* espera */
+
+/*
+ * Barra fina no topo da página. Acende em qualquer requisição, inclusive nas
+ * que não bloqueiam a tela. A animação percorre a largura em vez de indicar
+ * progresso real, porque o tempo de resposta não é conhecido de antemão.
+ */
+.progresso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  z-index: 30;
+}
+
+.progresso.ativo {
+  opacity: 1;
+}
+
+.progresso::before {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 40%;
+  background: var(--destaque);
+  border-radius: 0 2px 2px 0;
+  transform: translateX(-100%);
+}
+
+.progresso.ativo::before {
+  animation: correr 1.1s ease-in-out infinite;
+}
+
+@keyframes correr {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+.veu {
+  position: fixed;
+  inset: 0;
+  background: rgba(244, 245, 247, 0.72);
+  backdrop-filter: blur(1px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.veu-caixa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  padding: 16px 22px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.12);
+}
+
+.girador {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--borda);
+  border-top-color: var(--destaque);
+  border-radius: 50%;
+  animation: girar 700ms linear infinite;
+  flex: none;
+}
+
+.girador.pequeno {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+.aguardando {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.aguardando .ajuda {
+  margin: 0;
+}
+
+.salvando {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+  font-size: 13px;
+  color: var(--destaque);
+}
+
+/*
+ * Quem pediu menos animação recebe o mesmo aviso, parado. O indicador continua
+ * visível: o que se remove é o movimento, não a informação.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .progresso.ativo::before {
+    animation: none;
+    width: 100%;
+    transform: none;
+  }
+
+  .girador {
+    animation: none;
+    border-top-color: var(--destaque);
+    border-right-color: var(--destaque);
+  }
+}
